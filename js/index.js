@@ -1045,6 +1045,12 @@ function uploadApp(app, options) {
   }
 
   return startOperation({name:"App Upload"}, () => getInstalledApps().then(()=>{
+    if (app.requiredFw!==undefined){
+      if(device.version < app.requiredFw) {
+        showToast(`App "${app.name}" requires firmware version ${app.requiredFw} or higher. You have version ${device.version}. To install this app, please update your firmware.`,"warning");
+        return;
+      }
+    }
     if (device.appsInstalled.some(i => i.id === app.id)) {
       return updateApp(app, {noNewOperation:true /*in 'App Upload'*/});
     }
