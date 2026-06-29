@@ -330,7 +330,7 @@ function showAppInfo(appid, installedVersion) {
     const infoPart = infoTxt.length>0 ? marked(infoTxt.join("<br>")) : "";
     const changelogPart = changelogText ? changelogText.replace(/\n/g, "<br/>") : "";
     const changeLogHeading = changelogPart ? "<hr><strong>ChangeLog:</strong><br>" : "";
-    showPrompt(app.name + " App Information", infoPart + changeLogHeading + changelogPart, {ok: true,}, false).catch(() => {});
+    showPrompt(app.name + " App Information", infoPart + changeLogHeading + changelogPart, {ok: true,githubIssue:app}, false).catch(() => {});
   });
 }
 function getAppDescription(app) {
