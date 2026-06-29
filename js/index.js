@@ -948,9 +948,10 @@ function refreshLibrary(options) {
           if (file) entrypoint = JSON.stringify(file.name);
           else showToast("No entrypoint found for app. Loading default clock.","warning");
           // start the emulator and upload the whole app (and dependencies)
+          // eslint-disable-next-line no-undef
           startCleanEmulator()
-          .then(() => uploadApp(app))
-          .then(() => Comms.write(`load(${entrypoint});\n`));
+            .then(() => uploadApp(app))
+            .then(() => Comms.write(`load(${entrypoint});\n`));
         } else { // fallback - open the Web IDE
           if (!file) {
             console.error("No entrypoint found for "+appid);
