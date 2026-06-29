@@ -115,11 +115,20 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
             ${buttons.yes?'<button class="btn btn-primary" isyes="1">Yes</button>':''}
             ${buttons.no?'<button class="btn" isyes="0">No</button>':''}
             ${buttons.ok?'<button class="btn" isyes="1">Ok</button>':''}
+            ${buttons.githubIssue?`<button class="btn" id="githubIssue">Report Issue</button>`:''}
             ${buttons.footer?`<span style="float:left">${buttons.footer}<span>`:""}
           </div>
         `:``}
       </div>
     </div>`);
+
+    if (buttons.githubIssue) {
+      const issueBtn = modal.querySelector("#githubIssue");
+      if (issueBtn) {
+        issueBtn.app = buttons.githubIssue; 
+      }
+    }
+
     document.body.append(modal);
     modal.querySelector("a[href='#close']").addEventListener("click",event => {
       event.preventDefault();
@@ -131,9 +140,14 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
         event.preventDefault();
         let isYes = event.target.getAttribute("isyes")=="1";
         if (isYes) resolve();
+        else if (event.target.app) {
+          console.log("User data:",event.target.app);
+          window.open(`https://github.com/espruino/BangleApps/issues/new?template=bangle-bug-report-custom-form.yaml&title=[${event.target.app.name.replace(" ", "%20")}] Describe%20the%20issue...`, '_blank');
+
+        }
         else reject("User cancelled");
         modal.remove();
-      });
+      })
     });
   });
 }
