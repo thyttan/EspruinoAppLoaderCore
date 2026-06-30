@@ -333,8 +333,8 @@ function showAppInfo(appid, installedVersion) {
     showPrompt(app.name + " App Information", infoPart + changeLogHeading + changelogPart, {ok: true, githubIssue: true}, false).catch(() => {}).then((c)=>{
       if(c=="githubIssue"){
         const encodedTitle = encodeURIComponent(`[${app.name}] Describe the issue...`);
-        const encodedReportText = encodeURIComponent(`Tagging @${app.author} as the app author.\n\n`);
-        window.open(`https://github.com/espruino/BangleApps/issues/new?template=bangle-bug-report-custom-form.yaml&title=${encodedTitle}&fwversion=${device.version?device.version:""}`,'_blank');
+        const authorText = app.author ? encodeURIComponent(`@${app.author}`):"";
+        window.open(`https://github.com/espruino/BangleApps/issues/new?template=bangle-bug-report-custom-form.yaml&title=${encodedTitle}&fwversion=${device.version?device.version:""}&author=${authorText}`,'_blank');
       }
     }
 
