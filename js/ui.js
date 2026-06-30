@@ -135,7 +135,7 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
         else if (event.target.id=="githubIssue") resolve("githubIssue");
         else reject("User cancelled");
         modal.remove();
-      })
+      });
     });
   });
 }
