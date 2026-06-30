@@ -330,7 +330,15 @@ function showAppInfo(appid, installedVersion) {
     const infoPart = infoTxt.length>0 ? marked(infoTxt.join("<br>")) : "";
     const changelogPart = changelogText ? changelogText.replace(/\n/g, "<br/>") : "";
     const changeLogHeading = changelogPart ? "<hr><strong>ChangeLog:</strong><br>" : "";
-    showPrompt(app.name + " App Information", infoPart + changeLogHeading + changelogPart, {ok: true,githubIssue:app}, false).catch(() => {});
+    showPrompt(app.name + " App Information", infoPart + changeLogHeading + changelogPart, {ok: true,githubIssue:app}, false).catch(() => {}).then((c)=>{
+      if(c="githubIssue"){
+        const encodedTitle = encodeURIComponent(`[${app.name}] Describe the issue...`);
+        const encodedReportText = encodeURIComponent(`Tagging @${app.author} as the app author.\n\n`);
+        window.open(`https://github.com/espruino/BangleApps/issues/new?template=bangle-bug-report-custom-form.yaml&title=${encodedTitle}&fwversion=${device.version?device.version:""}`,'_blank');
+      }
+    }
+
+    );
   });
 }
 function getAppDescription(app) {
@@ -1046,7 +1054,7 @@ function uploadApp(app, options) {
 
   return startOperation({name:"App Upload"}, () => getInstalledApps().then(()=>{
     if (app.requiredFw!==undefined){
-      if(device.version < app.requiredFw) {
+      if(Utils.versionLess(app.requiredFw,device.version)) {
         showToast(`App "${app.name}" requires firmware version ${app.requiredFw} or higher. You have version ${device.version}. To install this app, please update your firmware.`,"warning");
         return;
       }
