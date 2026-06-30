@@ -132,6 +132,7 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
         event.preventDefault();
         let isYes = event.target.getAttribute("isyes")=="1";
         if (isYes) resolve();
+        else if (event.target.id=="githubIssue") resolve("githubIssue");
         else reject("User cancelled");
         modal.remove();
       })
