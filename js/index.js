@@ -672,8 +672,6 @@ function getAppHTML(app, appInstalled, forInterface) {
   let infoTxt= getAppInfo(app,false)
   if (infoTxt.length) versionTitle = `title="${infoTxt.join("\n")}"`;
   
-  
-  
   if (versionInfo) versionInfo = ` <small ${versionTitle}>(${versionInfo})</small>`;
   let appurl = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(app.id);
   let readme = `<a class="c-hand" href="${appurl}&readme" onclick="showReadme(event,'${app.id}')">Read more...</a>`;
@@ -1054,9 +1052,9 @@ function uploadApp(app, options) {
   }
 
   return startOperation({name:"App Upload"}, () => getInstalledApps().then(()=>{
-    if (app.requiredFw!==undefined){
-      if(Utils.versionLess(device.version,app.requiredFw)) {
-        showToast(`App "${app.name}" requires firmware version ${app.requiredFw} or higher. You have version ${device.version}. To install this app, please update your firmware.`,"warning");
+    if (app.requires_firmware!==undefined){
+      if(Utils.versionLess(device.version,app.requires_firmware)) {
+        showToast(`App "${app.name}" requires firmware version ${app.requires_firmware} or higher. You have version ${device.version}. To install this app, please update your firmware.`,"warning");
         return;
       }
     }
