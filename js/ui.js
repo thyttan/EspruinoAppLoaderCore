@@ -115,6 +115,7 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
             ${buttons.yes?'<button class="btn btn-primary" isyes="1">Yes</button>':''}
             ${buttons.no?'<button class="btn" isyes="0">No</button>':''}
             ${buttons.ok?'<button class="btn" isyes="1">Ok</button>':''}
+            ${buttons.githubIssue?`<button class="btn" id="githubIssue">Report Issue</button>`:''}
             ${buttons.footer?`<span style="float:left">${buttons.footer}<span>`:""}
           </div>
         `:``}
@@ -131,6 +132,7 @@ function showPrompt(title, text, buttons, shouldEscapeHtml) {
         event.preventDefault();
         let isYes = event.target.getAttribute("isyes")=="1";
         if (isYes) resolve();
+        else if (event.target.id=="githubIssue") resolve("githubIssue");
         else reject("User cancelled");
         modal.remove();
       });
