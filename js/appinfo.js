@@ -156,7 +156,7 @@ function parseJS(storageFile, options, app) {
     return Espruino.transform(js, {
       SAVE_ON_SEND : -1, // ensure EspruinoTools doesn't try and wrap this is write commands, also stops pretokenise from assuming we're writing to RAM
       SET_TIME_ON_WRITE : false,
-      PRETOKENISE : options.settings.pretokenise,
+      PRETOKENISE : options.settings.pretokenise && (storageFile.name!="RAM"), // we can't pretokenise code we're sending to the REPL (https://github.com/espruino/BangleApps/pull/4271#discussion_r3734481440)
       MODULE_URL : localModulesURL+"|https://www.espruino.com/modules",
       MINIFICATION_LEVEL : minify ? "ESPRIMA" : undefined,
       builtinModules : builtinModules.join(","),
