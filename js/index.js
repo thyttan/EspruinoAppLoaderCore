@@ -626,7 +626,7 @@ function getAppInfo(app, expanded){
     return txt;
   }
   if (app.id in appSortInfo) {
-  
+
     let info = appSortInfo[app.id];
     if (info.installs){
       let percent=(info.installs / appCounts.installs * 100).toFixed(0);
@@ -671,7 +671,7 @@ function getAppHTML(app, appInstalled, forInterface) {
   appFavourites = getAppfavourites(app);
   let infoTxt= getAppInfo(app,false)
   if (infoTxt.length) versionTitle = `title="${infoTxt.join("\n")}"`;
-  
+
   if (versionInfo) versionInfo = ` <small ${versionTitle}>(${versionInfo})</small>`;
   let appurl = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(app.id);
   let readme = `<a class="c-hand" href="${appurl}&readme" onclick="showReadme(event,'${app.id}')">Read more...</a>`;
@@ -684,7 +684,7 @@ function getAppHTML(app, appInstalled, forInterface) {
     let txt = (n > 999) ? Math.round(n/100)/10+"k" : n;
     return `<span class="fav-count" style="margin-left:-1em;margin-right:0.5em">${txt}</span>`;
   };
-  
+
   let html = `<div class="tile column col-6 col-sm-12 col-xs-12 app-tile ${version.canUpdate?'updateTile':''}">
   <div class="tile-icon">
     <figure class="avatar"><img src="apps/${app.icon?`${app.id}/${app.icon}`:"unknown.png"}" alt="${escapeHtml(app.name)}"></figure>
@@ -738,14 +738,14 @@ let libraryShowAll = false; // perist whether user chose to view all apps
 // Update the sort state to match the current sort value
 function refreshSort(){
   let sortContainer = document.querySelector("#librarycontainer .sort-nav");
-  let sortToggle = sortContainer.querySelector('.dropdown-toggle span');
-  let sortAnchors = sortContainer.querySelectorAll('.menu-item a');
-  
+  let sortToggle = sortContainer&&sortContainer.querySelector('.dropdown-toggle span');
+  let sortAnchors = sortContainer&&sortContainer.querySelectorAll('.menu-item a');
+
   // Find the currently selected sort and update label
-  let activeAnchor = Array.from(sortAnchors).find(a => 
+  let activeAnchor = sortAnchors && Array.from(sortAnchors).find(a =>
     a.getAttribute('sortid') === (activeSort || '')
   );
-  
+
   if (activeAnchor && sortToggle) {
     sortToggle.innerHTML = '<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M6.97 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1-1.06 1.06L8.25 4.81V16.5a.75.75 0 0 1-1.5 0V4.81L3.53 8.03a.75.75 0 0 1-1.06-1.06l4.5-4.5Zm9.53 4.28a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V7.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" /></svg>';
     if (activeSort === ''||!activeSort) {
@@ -809,17 +809,17 @@ function refreshLibrary(options) {
     searchValue = "";
   }
   let filtersContainer = document.querySelector("#librarycontainer .filter-nav");
-  let filterToggle = filtersContainer.querySelector('.dropdown-toggle span');
-  let filterAnchors = filtersContainer.querySelectorAll('.menu-item a');
-  
+  let filterToggle = filtersContainer && filtersContainer.querySelector('.dropdown-toggle span');
+  let filterAnchors = filtersContainer && filtersContainer.querySelectorAll('.menu-item a');
+
   // Find the currently selected filter and update label
-  let activeFilterAnchor = Array.from(filterAnchors).find(a => 
+  let activeFilterAnchor = filterAnchors && Array.from(filterAnchors).find(a =>
     a.getAttribute('dt') === (searchChip || '')
   );
-  
+
   if (activeFilterAnchor && filterToggle) {
     filterToggle.innerHTML = '<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clip-rule="evenodd" /></svg>';
-    filterToggle.innerHTML += activeFilterAnchor.textContent;  
+    filterToggle.innerHTML += activeFilterAnchor.textContent;
   }
   // update the search box value
   if (!options.dontChangeSearchBox) {
@@ -1491,20 +1491,20 @@ connectMyDeviceBtn.addEventListener("click", () => {
 Comms.watchConnectionChange(handleConnectionChange);
 
 let filtersContainer = document.querySelector("#librarycontainer .filter-nav");
-filtersContainer.addEventListener('click', ({ target }) => {
+if (filtersContainer) filtersContainer.addEventListener('click', ({ target }) => {
   // Only handle anchor clicks in menu items
   if (target.tagName !== 'A' || !target.hasAttribute('dt')) return;
-  
+
   let filterName = target.getAttribute('dt') || '';
   window.history.replaceState(null, null, "?c=" + filterName);
   refreshLibrary();
 });
 
 let sortContainer = document.querySelector("#librarycontainer .sort-nav");
-sortContainer.addEventListener('click', ({ target }) => {
+if (sortContainer) sortContainer.addEventListener('click', ({ target }) => {
   // Only handle anchor clicks in menu items
   if (target.tagName !== 'A' || !target.hasAttribute('sortid')) return;
-  
+
   activeSort = target.getAttribute('sortid') || '';
   refreshSort();
   refreshLibrary();
