@@ -550,7 +550,7 @@ const Comms = {
 
     return (Comms.espruinoDevice?Promise.resolve():Comms.getDeviceInfo(true/*noreset*/)) // ensure Comms.espruinoDevice is set
       .then(() => new Promise((resolve,reject) => {
-        let timeout = 5;
+        let timeout = 8;
         function handleResult(result,err) {
           console.log("<COMMS> removeAllApps: received "+JSON.stringify(result));
           if (!Comms.isConnected())
